@@ -48,6 +48,6 @@ void * get_block_data(memblock * block); // Function to get the data of a block 
 
 void write_out_leaked_and_invalid(); // Function to write out stats.
 
-void printblock(memblock * block); // Function to print a block.
+void printblock(memblock * block); // Function to print a block. Perfect for debugging
 
 #endif //MYLLOC_MEMBLOCK_H

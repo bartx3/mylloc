@@ -9,9 +9,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(mylloc STATIC src/mylloc.c
         src/memblock.c
-        tests/test_malloc.c)
+        tests/test_mylloc.c
+        tests/testfunc.c)
 
-add_executable(mylloc_tests tests/test_malloc.c)
+add_executable(mylloc_tests tests/test_mylloc.c tests/testfunc.c)
 
 target_link_libraries(mylloc ${ZLIB_LIBRARIES})
 

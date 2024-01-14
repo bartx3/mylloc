@@ -20,7 +20,6 @@ extern bool mylloc_initialized;
 
 void print_stats(void);
 void print_final_stats(void);
-int occupied_blocks(); // Function to count unfreed blocks. (Just for testing)
 
 #ifdef __GNUC__
 #define MYLLOC_INIT __attribute__((constructor))

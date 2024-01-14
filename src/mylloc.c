@@ -45,26 +45,25 @@ void print_final_stats(void)
 }
 
 
-
-
-
 void * mylloc_impl(size_t size, const char * file, unsigned int line) {
     printf("mylloc_impl(%zu, %s, %u)\n", size, file, line);
     if (!mylloc_initialized) {
         printf("mylloc not initialized\n");
         return NULL;
     }
+    if (size == 0) { // If the size is 0.
+        return NULL; // Return NULL.
+    }
     pthread_mutex_lock(&mylloc_mutex);
-    memblock * block = find_free_block(size); // Find a free block of memory.
+    memblock *block = find_free_block(size); // Find a free block of memory.
     if (block == NULL) { // If the block is NULL.
         block = new_block(size); // Create a new block of memory.
-        sbrk_calls+=2; // Increment the sbrk calls. (one for getting required padding and one for getting the block)
+        sbrk_calls += 2; // Increment the sbrk calls. (one for getting required padding and one for getting the block)
         if (block == NULL) { // If the block is NULL.
             pthread_mutex_unlock(&mylloc_mutex);
             return NULL; // Return NULL.
         }
-    }
-    if (block->size > size + sizeof(memblock)) { // If the size of the block is greater than the size + size of the block structure.
+    } else {
         split_block(block, size); // Split the block.
     }
     block->free = false; // Set the block to not free.
@@ -95,11 +94,12 @@ void myfree(void * ptr) {
     }
     memblock * block = (memblock *) (ptr - sizeof(memblock)); // Set the block to the pointer - size of the block structure.
     if (!is_valid_block(block)) { // If the block is not a valid block.
+        printf("freeing invalid block\n");
         pthread_mutex_unlock(&mylloc_mutex);
         return; // Return.
     }
-    free_block(block); // Free the block.
     mylloc_current_memory_usage -= block->size; // Decrement the total allocated by the size of the block.
+    free_block(block); // Free the block.
     if (last_block != NULL && last_block->free) { // If the last block is not NULL and is free.
         give_back_hanging_blocks(); // Give back hanging blocks.
     }
@@ -107,29 +107,19 @@ void myfree(void * ptr) {
 }
 
 void give_back_hanging_blocks() {
-    memblock * block = last_block; // Set the block to the first block.
+    printf("Giving back hanging blocks\n");
+    memblock *block = last_block; // Set the block to the first block.
     while (block != NULL && block->free) { // While the previous block is not NULL.
-        memblock * prev = block->prev; // Set the previous block to the previous block of the block.
+        memblock *prev = block->prev; // Set the previous block to the previous block of the block.
         give_block_back_to_os(block); // Give the block back to the OS.
         sbrk_calls++; // Increment the sbrk calls. (for sbrk below 0)
         block = prev; // Set the block to the previous block.
     }
     last_block = block; // Set the last block to the block.
-    if (block != NULL)
+    if (block != NULL) {
         block->next = NULL; // Set the next block of the block to NULL.
+        validate_block(block); // Validate the block.
+    }
     else
         first_block = NULL; // Set the first block to NULL as we have freed every block
-}
-
-int occupied_blocks() {
-    int count = 0; // Set the count to 0.
-    memblock * block = first_block; // Set the block to the first block.
-    while (block != NULL) { // While the block is not NULL.
-        printblock(block);
-        if (!block->free) { // If the block is not free.
-            count++; // Increment the count.
-        }
-        block = block->next; // Set the block to the next block.
-    }
-    return count; // Return the count.
 }

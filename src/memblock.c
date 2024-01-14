@@ -99,9 +99,12 @@ void free_block(memblock * block) {
         if (block->next->free) { // If the next block is free.
             merge_block(block); // Merge the block.
         }
-        block->size += block->next->padding; // Increment the size of the block by the padding of the next block.
-        block->next->padding = 0; // Merge the block.
-        validate_block(block->next); // Validate the block.
+        else if (block->next->padding > 0) {
+            block->size += block->next->padding; // Increment the size of the block by the padding of the next block.
+            block->next->padding = 0; // Merge the padding.
+            validate_block(block->next); // Validate the block.
+            validate_block(block); // Validate the block.
+        }
     }
     if (block->prev != NULL && is_valid_block_or_exit(block->prev) && block->prev->free) { // If the previous block is not NULL and is free.
         merge_block(block->prev); // Merge the previous block.
@@ -114,36 +117,47 @@ void * get_block_data(memblock * block) {
 }
 
 void merge_block(memblock * block) {
+    printf("Merging block %p and %p\n", block, block->next);
     is_valid_block_or_exit(block); // Check if the block is valid.
     is_valid_block_or_exit(block->next); // Check if the next block is valid.
-    if (block->next != NULL && block->next->free) { // If the next block is not NULL and is free.
-        block->size += sizeof(memblock) + block->next->size; // Increment the size of the block by the size of the next block.
-        block->next = block->next->next; // Set the next block to the next block of the next block.
-        if (block->next != NULL) { // If the next block is not NULL.
-            block->next->prev = block; // Set the previous block of the next block to the block.
-        }
+    if (block->next == NULL || !block->next->free) { // If the next block is NULL or free.
+        printf("nothing to do!\n");
+        return;
     }
+    block->size += sizeof(memblock) + block->next->size; // Increment the size of the block by the size of the next block.
+    block->next = block->next->next; // Set the next block to the next block of the next block.
+    if (block->next != NULL) { // If the next block is not NULL.
+        block->next->prev = block; // Set the previous block of the next block to the block.
+        validate_block(block->next); // Validate the next block.
+    }
+    else
+        last_block = block; // Set the last block to the block.
     validate_block(block); // Validate the block.
 }
 
 void split_block(memblock * block, size_t size) {
     is_valid_block_or_exit(block); // Check if the block is valid.
-    if (block->size > size + sizeof(memblock)) { // If the size of the block is greater than the size + size of the block structure.
-        memblock * new = (memblock *) (get_block_data(block) + size); // Create a new block.
-        new->free = true; // Set the new block to free.
-        new->file = NULL; // Set the file of the new block to NULL.
-        new->line = 0; // Set the line of the new block to 0.
-        new->size = block->size - size - sizeof(memblock); // Set the size of the new block to the size of the block - size - size of the block structure.
-        new->prev = block; // Set the previous block of the new block to the block.
-        new->next = block->next; // Set the next block of the new block to the next block of the block.
-        if (new->next != NULL) { // If the next block of the new block is not NULL.
-            new->next->prev = new; // Set the previous block of the next block of the new block to the new block.
-        }
-        block->size = size; // Set the size of the block to the size.
-        block->next = new; // Set the next block of the block to the new block.
-        validate_block(block); // Validate the block.
-        validate_block(new); // Validate the new block.
+    char newblockpadding = (16 - ((size_t) get_block_data(block) + size) % 16) % 16; // Set the new block padding to the padding of the block.
+    if (block->size <= size + sizeof(memblock) + newblockpadding) { // If the size of the block is greater than the size + size of the block structure.
+        printf("Block unsplittable\n");
+        return;
     }
+    memblock * new = (memblock *) (get_block_data(block) + size + newblockpadding); // Create a new block.
+    new->free = true; // Set the new block to free.
+    new->padding = newblockpadding; // Set the padding of the new block to the new block padding.
+    new->file = NULL; // Set the file of the new block to NULL.
+    new->line = 0; // Set the line of the new block to 0.
+    new->size = block->size - size - sizeof(memblock) - newblockpadding; // Set the size of the new block to the size of the block - size - size of the block structure.
+    new->prev = block; // Set the previous block of the new block to the block.
+    new->next = block->next; // Set the next block of the new block to the next block of the block.
+    if (new->next != NULL) { // If the next block of the new block is not NULL.
+        new->next->prev = new; // Set the previous block of the next block of the new block to the new block.
+        validate_block(new->next); // Validate the next block of the new block.
+    }
+    block->size = size; // Set the size of the block to the size.
+    block->next = new; // Set the next block of the block to the new block.
+    validate_block(block); // Validate the block.
+    validate_block(new); // Validate the new block.
 }
 
 void give_block_back_to_os(memblock * block) {
