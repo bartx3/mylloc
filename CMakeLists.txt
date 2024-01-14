@@ -25,10 +25,4 @@ add_executable(e2e "tests/e2e/e2e.c")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/e2e/rune2etest.py ${CMAKE_CURRENT_BINARY_DIR}/rune2etest.py COPYONLY)
 
-add_custom_target(run_e2e
-        COMMAND python3 rune2etest.py
-        DEPENDS e2e
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        )
-
 target_link_libraries(e2e mylloc)

@@ -8,7 +8,6 @@ bool mylloc_initialized = false;
 
 void mylloc_init(void)
 {
-    printf("mylloc_init()\n");
     pthread_mutex_init(&mylloc_mutex, NULL);
     first_block = NULL;
     last_block = NULL;
@@ -47,7 +46,6 @@ void print_final_stats(void)
 
 
 void * mylloc_impl(size_t size, const char * file, unsigned int line) {
-    printf("mylloc_impl(%zu, %s, %u)\n", size, file, line);
     if (!mylloc_initialized) {
         printf("mylloc not initialized\n");
         return NULL;
@@ -83,7 +81,6 @@ void * mylloc_impl(size_t size, const char * file, unsigned int line) {
 }
 
 void myfree(void * ptr) {
-    printf("myfree(%p)\n", ptr);
     if (!mylloc_initialized) {
         printf("mylloc not initialized\n");
         return;
@@ -95,7 +92,6 @@ void myfree(void * ptr) {
     }
     memblock * block = (memblock *) (ptr - sizeof(memblock)); // Set the block to the pointer - size of the block structure.
     if (!is_valid_block(block)) { // If the block is not a valid block.
-        printf("freeing invalid block\n");
         pthread_mutex_unlock(&mylloc_mutex);
         return; // Return.
     }
@@ -108,7 +104,6 @@ void myfree(void * ptr) {
 }
 
 void give_back_hanging_blocks() {
-    printf("Giving back hanging blocks\n");
     memblock *block = last_block; // Set the block to the first block.
     while (block != NULL && block->free) { // While the previous block is not NULL.
         memblock *prev = block->prev; // Set the previous block to the previous block of the block.

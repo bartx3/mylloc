@@ -117,11 +117,9 @@ void * get_block_data(memblock * block) {
 }
 
 void merge_block(memblock * block) {
-    printf("Merging block %p and %p\n", block, block->next);
     is_valid_block_or_exit(block); // Check if the block is valid.
     is_valid_block_or_exit(block->next); // Check if the next block is valid.
     if (block->next == NULL || !block->next->free) { // If the next block is NULL or free.
-        printf("nothing to do!\n");
         return;
     }
     block->size += sizeof(memblock) + block->next->size; // Increment the size of the block by the size of the next block.
@@ -139,7 +137,6 @@ void split_block(memblock * block, size_t size) {
     is_valid_block_or_exit(block); // Check if the block is valid.
     char newblockpadding = (16 - ((size_t) get_block_data(block) + size) % 16) % 16; // Set the new block padding to the padding of the block.
     if (block->size <= size + sizeof(memblock) + newblockpadding) { // If the size of the block is greater than the size + size of the block structure.
-        printf("Block unsplittable\n");
         return;
     }
     memblock * new = (memblock *) (get_block_data(block) + size + newblockpadding); // Create a new block.
@@ -161,7 +158,6 @@ void split_block(memblock * block, size_t size) {
 }
 
 void give_block_back_to_os(memblock * block) {
-    printf("Giving block back to OS\n");
     is_valid_block_or_exit(block); // Check if the block is valid.
     if (block->next == NULL) { // If the next block is NULL.
         if (block->prev != NULL) // If the previous block is NULL.
