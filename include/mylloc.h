@@ -13,12 +13,14 @@ void myfree(void * ptr);
 pthread_mutex_t mylloc_mutex;
 size_t mylloc_total_allocated;
 unsigned long int mylloc_total_allocations;
+size_t mylloc_current_memory_usage;
 size_t mylloc_peak_memory_usage;
 unsigned long int sbrk_calls;
-bool mylloc_initialized = false;
+extern bool mylloc_initialized;
 
 void print_stats(void);
 void print_final_stats(void);
+int occupied_blocks(); // Function to count unfreed blocks. (Just for testing)
 
 #ifdef __GNUC__
 #define MYLLOC_INIT __attribute__((constructor))

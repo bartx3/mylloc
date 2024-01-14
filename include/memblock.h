@@ -19,8 +19,8 @@ typedef struct memblock {   // Our data structure for memory blocks. Takes up 40
     struct memblock *next;
 } memblock;
 
-memblock * first_block = NULL;  // Pointer to the first block of memory.
-memblock * last_block = NULL;   // Pointer to the last block of memory.
+memblock * first_block;  // Pointer to the first block of memory.
+memblock * last_block;   // Pointer to the last block of memory.
 
 memblock  * new_block(size_t size); // Function to create a new block of memory.
 
@@ -47,5 +47,7 @@ void give_back_hanging_blocks(); // Function to give back hanging blocks.
 void * get_block_data(memblock * block); // Function to get the data of a block of memory.
 
 void write_out_leaked_and_invalid(); // Function to write out stats.
+
+void printblock(memblock * block); // Function to print a block.
 
 #endif //MYLLOC_MEMBLOCK_H

@@ -1,3 +1,4 @@
 /home/bartek/Desktop/mylloc/cmake-build-debug/CMakeFiles/mylloc.dir
+/home/bartek/Desktop/mylloc/cmake-build-debug/CMakeFiles/mylloc_tests.dir
 /home/bartek/Desktop/mylloc/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/bartek/Desktop/mylloc/cmake-build-debug/CMakeFiles/rebuild_cache.dir

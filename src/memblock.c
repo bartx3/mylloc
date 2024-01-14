@@ -17,8 +17,7 @@ memblock * new_block(size_t size) {
     }
     // add enough so thatfirst adress after block structure is aligned to 16
     size_t padding = (16 - ((size_t) last_byte + sizeof(memblock)) % 16) % 16;
-    size += padding;
-    memblock * block = sbrk(size + sizeof(memblock)); // Increment the program break by size + sizeof(memblock).
+    memblock * block = sbrk(padding + size + sizeof(memblock)) + padding; // Increment the program break by size + sizeof(memblock) and add padding to our pointer.
     if (block == (void*) -1) { // If sbrk() returned -1, then an error occurred.
         return NULL;
     }
@@ -32,7 +31,16 @@ memblock * new_block(size_t size) {
     block->next = NULL; // Set the next block to NULL.
     validate_block(block); // Validate the block.
 
+    if (first_block == NULL) // If the first block is NULL.
+        first_block = block; // Set the first block to the block.
+    else {
+        is_valid_block_or_exit(last_block); // Check if the last block is valid.
+        last_block->next = block; // Set the next block of the last block to the block.
+        validate_block(last_block); // Validate the last block.
+    }
+
     last_block = block; // Set the last block to the block.
+
     return block; // Return the block.
 }
 
@@ -139,19 +147,21 @@ void split_block(memblock * block, size_t size) {
 }
 
 void give_block_back_to_os(memblock * block) {
+    printf("Giving block back to OS\n");
     is_valid_block_or_exit(block); // Check if the block is valid.
     if (block->next == NULL) { // If the next block is NULL.
-        if (block->prev == NULL) { // If the previous block is NULL.
-            sbrk(-block->size - sizeof(memblock)); // Decrement the program break by the size of the block + size of the block structure.
-        } else {
+        if (block->prev != NULL) // If the previous block is NULL.
             block->prev->next = NULL; // Set the next block of the previous block to NULL.
-            sbrk(-block->size - sizeof(memblock)); // Decrement the program break by the size of the block + size of the block structure.
-        }
+
+        intptr_t bytes_to_free = block->size + sizeof(memblock) + block->padding; // Set the bytes to free to the size of the block + size of the block structure + padding of the block.
+
+        sbrk(-bytes_to_free); // Decrement the program break by the size of the block + size of the block structure.
     }
 }
 
 void write_out_leaked_and_invalid() {
     memblock * block = first_block; // Set the block to the first block.
+    printf("Writing out leaked and invalid blocks:\n");
     while (block != NULL) { // While the block is not NULL.
         if (!is_valid_block(block)) { // If the block is not valid.
             printf("Block with allocated pointer at %p allocated at file: %s line: %u is invalid\n", get_block_data(block), block->file, block->line); // Print out that the block is invalid.
@@ -161,4 +171,13 @@ void write_out_leaked_and_invalid() {
         }
         block = block->next; // Set the block to the next block.
     }
+}
+
+void printblock(memblock * block)
+{
+    printf("Block at %p, size %zu, free %d, file %s, line %u\n", block, block->size, block->free, block->file, block->line);
+    printf("Block data at %p\n", get_block_data(block));
+    printf("Block next at %p\n", block->next);
+    printf("Block prev at %p\n", block->prev);
+    printf("Block padding %d\n", block->padding);
 }
