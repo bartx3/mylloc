@@ -5,7 +5,9 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
     steps:
       - uses: actions/checkout@v2
 
@@ -15,8 +17,6 @@ jobs:
           sudo apt-get install -y valgrind clang-tidy clang clang-tools libcunit1-dev gcc cmake make python3 zlib1g-dev
 
       - name: Build project
-        matrix:
-          compiler: [gcc, clang]
         run: |
           chmod +x install_env.sh
           chmod +x build_lib.sh
