@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmylloc.a  CMakeFiles/mylloc.dir/src/mylloc.c.o CMakeFiles/mylloc.dir/src/memblock.c.o CMakeFiles/mylloc.dir/tests/unit_tests/test_mylloc.c.o CMakeFiles/mylloc.dir/tests/unit_tests/testfunc.c.o CMakeFiles/mylloc.dir/tests/e2e/e2e.c.o
-/usr/bin/ranlib libmylloc.a

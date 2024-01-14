@@ -1,0 +1,3 @@
+[submodule "mylloc"]
+	path = mylloc
+	url = https://github.com/bartx3/mylloc

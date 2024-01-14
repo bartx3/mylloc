@@ -1,6 +1,0 @@
-/home/bartek/Desktop/mylloc/build/CMakeFiles/rebuild_cache.dir
-/home/bartek/Desktop/mylloc/build/CMakeFiles/e2e_run.dir
-/home/bartek/Desktop/mylloc/build/CMakeFiles/e2e.dir
-/home/bartek/Desktop/mylloc/build/CMakeFiles/mylloc_tests.dir
-/home/bartek/Desktop/mylloc/build/CMakeFiles/edit_cache.dir
-/home/bartek/Desktop/mylloc/build/CMakeFiles/mylloc.dir

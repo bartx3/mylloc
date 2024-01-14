@@ -3,6 +3,7 @@ project(mylloc C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-fprofile-arcs -ftest-coverage")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(ZLIB REQUIRED)
 
