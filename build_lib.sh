@@ -6,6 +6,8 @@ if [ "$2" == "clang" ]; then
 else
   # otherwise use gcc compiler
   cmake -S . -B build # -S: source directory, -B: build directory
+fi
+
 
 cd build || exit
 
