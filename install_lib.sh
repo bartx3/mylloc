@@ -1,4 +1,5 @@
 workdir=$(pwd)
+compiler=$2
 
 if [ -d .git ]; then
     # Check if we have a submodule
@@ -7,12 +8,12 @@ if [ -d .git ]; then
         if [ ! -f libmylloc.a ]; then
             # Build the library
             cd mylloc || exit
-            ./build_lib.sh "$workdir"
+            ./build_lib.sh "$workdir" "$compiler"
         fi
     else
             git submodule add https://github.com/bartx3/mylloc mylloc
             cd mylloc || exit
-            ./build_lib.sh "$workdir"
+            ./build_lib.sh "$workdir" "$compiler"
     fi
 else
     if [ ! -d mylloc ]; then
@@ -23,6 +24,6 @@ else
     if [ ! -f libmylloc.a ]; then
         # Build the library
         cd mylloc || exit
-        ./build_lib.sh "$workdir"
+        ./build_lib.sh "$workdir" "$compiler"
     fi
 fi

@@ -12,14 +12,16 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y valgrind clang-tidy clang clang-tools gcc cmake make python3 zlib1g-dev
+          sudo apt-get install -y valgrind clang-tidy clang clang-tools libcunit1-dev gcc cmake make python3 zlib1g-dev
 
       - name: Build project
+        matrix:
+          compiler: [gcc, clang]
         run: |
           chmod +x install_env.sh
           chmod +x build_lib.sh
           chmod +x install_lib.sh
-          ./install_lib.sh
+          ./install_lib.sh . ${{compiler}}
           make all
 
       - name: Run unit tests
