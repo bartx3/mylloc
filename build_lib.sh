@@ -1,4 +1,4 @@
-. ./install_env.sh
+bash ./install_env.sh
 
 #if 2nd argument is clang then use clang compiler
 if [ "$2" == "clang" ]; then
