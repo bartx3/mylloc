@@ -44,3 +44,5 @@ clang_analyzer: build_lib.sh
 scan_build: build_lib.sh
 	./build_lib.sh .
 	scan-build -o build/ --status-bugs --keep-cc --show-description make
+
+test: unit_tests e2e_tests valgrind

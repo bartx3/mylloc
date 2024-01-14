@@ -1,0 +1,35 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y valgrind clang-tidy clang clang-tools gcc cmake make python3 zlib1g-dev
+
+      - name: Build project
+        run: |
+          chmod +x install_env.sh
+          chmod +x build_lib.sh
+          chmod +x install_lib.sh
+          ./install_lib.sh
+          make all
+
+      - name: Run unit tests
+        run: make unit_tests
+
+      - name: Run e2e tests
+        run: make e2e_tests
+
+      - name: Run valgrind
+        run: make valgrind
+
+      - name: Run clang-tidy
+        run: make clang_tidy
