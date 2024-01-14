@@ -1,9 +1,12 @@
 #!/bin/bash
 
-tools=("valgrind" "clang-tidy" "clang" "clang-tools" "gcc" "cmake" "make")
+tools=("valgrind" "clang-tidy" "clang" "clang-tools" "gcc" "cmake" "make" "python3" "zlib1g-dev")
+
+blank=""
 
 for tool in "${tools[@]}"; do
-  if command -v $tool >/dev/null 2>&1; then
-    sudo apt install $tool
+  policy=$(apt-cache policy "$tool" | grep "Installed:")
+  if [[ "$policy" == "$blank" ]]; then
+    sudo apt-get install "$tool"
   fi
 done
