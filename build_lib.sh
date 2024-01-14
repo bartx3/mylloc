@@ -10,5 +10,7 @@ cd .. || exit
 
 # copy the library file to directory given in first argument fi such directory exists
 if [ -d "$1" ]; then
-  cp build/libmalloc.a "$1"
+  cp build/libmylloc.a "$1"
+else
+  cp build/libmylloc.a .
 fi

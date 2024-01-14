@@ -6,13 +6,11 @@ if [ -d .git ]; then
         # Check if the library is built
         if [ ! -f libmylloc.a ]; then
             # Build the library
-            chmod +x *.sh
             cd mylloc || exit
             ./build_lib.sh "$workdir"
         fi
     else
             git submodule add https://github.com/bartx3/mylloc mylloc
-            chmod +x *.sh
             cd mylloc || exit
             ./build_lib.sh "$workdir"
     fi
@@ -24,7 +22,6 @@ else
     fi
     if [ ! -f libmylloc.a ]; then
         # Build the library
-        chmod +x *.sh
         cd mylloc || exit
         ./build_lib.sh "$workdir"
     fi
