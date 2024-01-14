@@ -19,8 +19,8 @@ typedef struct memblock {   // Our data structure for memory blocks. Takes up 40
     struct memblock *next;
 } memblock;
 
-extern memblock * first_block;  // Pointer to the first block of memory.
-extern memblock * last_block;   // Pointer to the last block of memory.
+memblock * first_block;  // Pointer to the first block of memory.
+memblock * last_block;   // Pointer to the last block of memory.
 
 memblock  * new_block(size_t size); // Function to create a new block of memory.
 
