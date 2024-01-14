@@ -11,7 +11,7 @@ add_library(mylloc STATIC src/mylloc.c
         src/memblock.c
         "tests/unit tests/test_mylloc.c"
         "tests/unit tests/testfunc.c"
-        tests/e2e/program.c)
+        tests/e2e/e2e.c)
 
 add_executable(mylloc_tests "tests/unit tests/test_mylloc.c" "tests/unit tests/testfunc.c")
 
@@ -21,6 +21,14 @@ target_link_libraries(mylloc_tests mylloc)
 
 target_link_libraries(mylloc_tests cunit)
 
-add_executable(e2e "tests/e2e/program.c")
+add_executable(e2e "tests/e2e/e2e.c")
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/e2e/rune2etest.py ${CMAKE_CURRENT_BINARY_DIR}/rune2etest.py COPYONLY)
+
+add_custom_target(run_e2e
+        COMMAND python3 rune2etest.py
+        DEPENDS e2e
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        )
 
 target_link_libraries(e2e mylloc)

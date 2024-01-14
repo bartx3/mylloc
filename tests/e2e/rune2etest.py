@@ -1,7 +1,7 @@
 import subprocess
 
 # Run the C program
-process = subprocess.Popen(['./program'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+process = subprocess.Popen(['./e2e'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 # Wait for the program to finish and get the stdout and stderr
 stdout, stderr = process.communicate()
