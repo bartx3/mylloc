@@ -9,8 +9,6 @@ int occupied_blocks();
 
 int count_blocks();
 
-void print_blocks();
-
 
 
 #endif //MYLLOC_TESTFUNC_H

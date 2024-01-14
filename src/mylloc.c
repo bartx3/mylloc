@@ -123,3 +123,13 @@ void give_back_hanging_blocks() {
     else
         first_block = NULL; // Set the first block to NULL as we have freed every block
 }
+
+void print_blocks() {
+    printf("----------------------------------BEGIN-BLOCK-DUMP--------------------------------------\n");
+    memblock * block = first_block; // Set the block to the first block.
+    while (block != NULL) { // While the block is not NULL.
+        printblock(block);
+        block = block->next; // Set the block to the next block.
+    }
+    printf("-----------------------------------END-BLOCK-DUMP---------------------------------------\n");
+}

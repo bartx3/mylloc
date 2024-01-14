@@ -21,6 +21,8 @@ extern bool mylloc_initialized;
 void print_stats(void);
 void print_final_stats(void);
 
+void print_blocks();
+
 #ifdef __GNUC__
 #define MYLLOC_INIT __attribute__((constructor))
 MYLLOC_INIT void mylloc_init(void);

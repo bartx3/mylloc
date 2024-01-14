@@ -30,13 +30,3 @@ int count_blocks() {
 
     return count; // Return the count.
 }
-
-void print_blocks() {
-    printf("------------------------------------------------------------------------\n");
-    memblock * block = first_block; // Set the block to the first block.
-    while (block != NULL) { // While the block is not NULL.
-        printblock(block);
-        block = block->next; // Set the block to the next block.
-    }
-    printf("------------------------------------------------------------------------\n");
-}
