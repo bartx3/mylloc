@@ -1,0 +1,1 @@
+/usr/bin/cc -fprofile-arcs -ftest-coverage   CMakeFiles/e2e.dir/tests/e2e/e2e.c.o  -o e2e  libmylloc.a /usr/lib/x86_64-linux-gnu/libz.so 

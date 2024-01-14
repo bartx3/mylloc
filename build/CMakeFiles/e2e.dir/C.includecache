@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/mylloc.h
+stddef.h
+-
+stdbool.h
+-
+pthread.h
+-
+
+/home/bartek/Desktop/mylloc/tests/e2e/e2e.c
+mylloc.h
+/home/bartek/Desktop/mylloc/tests/e2e/mylloc.h
+assert.h
+-
+string.h
+-
+

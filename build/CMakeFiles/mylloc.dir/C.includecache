@@ -1,0 +1,80 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/memblock.h
+stdbool.h
+-
+stddef.h
+-
+
+../include/mylloc.h
+stddef.h
+-
+stdbool.h
+-
+pthread.h
+-
+
+/home/bartek/Desktop/mylloc/src/memblock.c
+memblock.h
+/home/bartek/Desktop/mylloc/src/memblock.h
+stdio.h
+-
+unistd.h
+-
+limits.h
+-
+zlib.h
+-
+string.h
+-
+signal.h
+-
+
+/home/bartek/Desktop/mylloc/src/mylloc.c
+mylloc.h
+/home/bartek/Desktop/mylloc/src/mylloc.h
+memblock.h
+/home/bartek/Desktop/mylloc/src/memblock.h
+stdio.h
+-
+stdlib.h
+-
+
+/home/bartek/Desktop/mylloc/tests/e2e/e2e.c
+mylloc.h
+/home/bartek/Desktop/mylloc/tests/e2e/mylloc.h
+assert.h
+-
+string.h
+-
+
+/home/bartek/Desktop/mylloc/tests/unit tests/test_mylloc.c
+stdio.h
+-
+mylloc.h
+/home/bartek/Desktop/mylloc/tests/unit tests/mylloc.h
+CUnit/Basic.h
+/home/bartek/Desktop/mylloc/tests/unit tests/CUnit/Basic.h
+testfunc.h
+/home/bartek/Desktop/mylloc/tests/unit tests/testfunc.h
+memblock.h
+/home/bartek/Desktop/mylloc/tests/unit tests/memblock.h
+
+/home/bartek/Desktop/mylloc/tests/unit tests/testfunc.c
+stdio.h
+-
+mylloc.h
+/home/bartek/Desktop/mylloc/tests/unit tests/mylloc.h
+memblock.h
+/home/bartek/Desktop/mylloc/tests/unit tests/memblock.h
+testfunc.h
+/home/bartek/Desktop/mylloc/tests/unit tests/testfunc.h
+
+/home/bartek/Desktop/mylloc/tests/unit tests/testfunc.h
+

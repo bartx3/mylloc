@@ -1,0 +1,1 @@
+/usr/bin/cc -fprofile-arcs -ftest-coverage   CMakeFiles/mylloc_tests.dir/tests/unit_tests/test_mylloc.c.o CMakeFiles/mylloc_tests.dir/tests/unit_tests/testfunc.c.o  -o mylloc_tests  libmylloc.a -lcunit /usr/lib/x86_64-linux-gnu/libz.so 
