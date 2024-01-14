@@ -115,9 +115,10 @@ int main() {
     CU_add_test(suite, "test_myfree", test_myfree);
     CU_add_test(suite, "test_mylloc3", test_mylloc3);
     CU_add_test(suite, "test_mylloc_split", test_mylloc_split);
-    CU_add_test(suite, "test_block_check", test_block_check);
+    CU_add_test(suite, "test_block_check", test_block_check); // must be done at the very end
     CU_basic_run_tests();
     CU_cleanup_registry();
-    return 0;
+
+    return 0;   //if test_block_check is performed, it will write about some errors but this is the intended behaviour
 }
 

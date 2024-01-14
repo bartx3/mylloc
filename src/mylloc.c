@@ -32,6 +32,7 @@ void print_stats(void)
     printf("mylloc_peak_memory_usage: %zu\n", mylloc_peak_memory_usage);
     printf("mylloc_current_memory_usage: %zu\n", mylloc_current_memory_usage);
     printf("sbrk_calls: %lu\n", sbrk_calls);
+    printf("mylloc_avg_alloc_size: %zu\n", mylloc_total_allocated / mylloc_total_allocations);
 }
 
 void print_final_stats(void)
