@@ -19,8 +19,8 @@ jobs:
       - name: Build project
         run: |
           chmod +x install_env.sh
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=${{ matrix.compiler }}
-          ls
+          cmake -S . -B build -DCMAKE_C_COMPILER=${{ matrix.compiler }}
+          ls build
           cp build/libmylloc.a .
 
       - name: Run unit tests
