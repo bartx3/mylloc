@@ -3,7 +3,7 @@
 //
 #include <stdio.h>
 #include "mylloc.h"
-#include "CUnit/Basic.h"
+#include <CUnit/Basic.h>
 #include "testfunc.h"
 #include "memblock.h"
 
