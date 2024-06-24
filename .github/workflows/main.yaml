@@ -15,7 +15,7 @@ jobs:
         run: |
           sudo apt-get update
           chmod +x install_env.sh
-          sudo ./install_env.sh
+          sudo bash install_env.sh
 
       - name: Build project
         run: |
