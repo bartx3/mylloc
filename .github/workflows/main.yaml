@@ -14,14 +14,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y valgrind clang-tidy clang clang-tools libcunit1-dev gcc cmake make python3 zlib1g-dev
+          chmod +x install_env.sh
+          sudo ./install_env.sh
 
       - name: Build project
         run: |
-          chmod +x install_env.sh
           cmake -S . -B build
-          ls build/CMakeFiles
-          cp build/CMakeFiles/libmylloc.a .
+          ls
 
       - name: Run unit tests
         run: make unit_tests
