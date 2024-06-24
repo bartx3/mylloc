@@ -13,8 +13,7 @@ build/mylloc_tests: build_lib.sh
 	./build_lib.sh .
 
 e2e_tests: build/e2e build/rune2etest.py
-	cd build
-	python3 build/rune2etest.py
+	cd build && python3 rune2etest.py
 	cd ..
 
 build/e2e: build_lib.sh

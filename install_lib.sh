@@ -17,9 +17,7 @@ if [ -d .git ]; then
     fi
 else
     if [ ! -d mylloc ]; then
-        # Download the logger zip file
-        git clone https://github.com/bartx3/mylloc.git
-        # Unzip the logger file
+        git clone https://github.com/bartx3/mylloc.git mylloc
     fi
     if [ ! -f libmylloc.a ]; then
         # Build the library
