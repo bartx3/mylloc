@@ -20,8 +20,8 @@ jobs:
         run: |
           chmod +x install_env.sh
           cmake -S . -B build
-          ls build
-          cp build/libmylloc.a .
+          ls build/CMakeFiles
+          cp build/CMakeFiles/libmylloc.a .
 
       - name: Run unit tests
         run: make unit_tests
