@@ -7,6 +7,6 @@ blank=""
 for tool in "${tools[@]}"; do
   policy=$(apt-cache policy "$tool" | grep "Installed:")
   if [[ "$policy" == "$blank" ]]; then
-    sudo apt-get install "$tool"
+    sudo apt-get install "$tool" -y
   fi
 done
