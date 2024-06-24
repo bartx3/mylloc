@@ -19,7 +19,7 @@ jobs:
 
       - name: Build project
         run: |
-          cmake -S . -B build
+          make
           ls
 
       - name: Run unit tests
