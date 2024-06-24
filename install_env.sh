@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Installing required tools..."
+
 tools=("valgrind" "clang-tidy" "clang" "clang-tools" "gcc" "cmake" "make" "python3" "zlib1g-dev" "libcunit1-dev" "libcunit1")
 
 blank=""
