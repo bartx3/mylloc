@@ -10,6 +10,29 @@
 #include <string.h>
 #include <signal.h>
 
+memblock * first_block;  // Pointer to the first block of memory.
+memblock * last_block;   // Pointer to the last block of memory.
+
+memblock * get_first_block(void)
+{
+    return first_block;
+}
+
+memblock * get_last_block(void)
+{
+    return last_block;
+}
+
+void set_first_block(memblock * block)
+{
+    first_block = block;
+}
+
+void set_last_block(memblock * block)
+{
+    last_block = block;
+}
+
 memblock * new_block(size_t size) {
     void * last_byte = sbrk(0);
     if (last_byte == NULL || last_byte == (void *) -1) {    // If sbrk() returned NULL, then an error occurred.

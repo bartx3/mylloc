@@ -13,7 +13,8 @@ add_library(mylloc STATIC src/mylloc.c
         src/memblock.c
         "tests/unit tests/test_mylloc.c"
         "tests/unit tests/testfunc.c"
-        tests/e2e/e2e.c)
+        tests/e2e/e2e.c
+)
 
 find_library(CUNIT_LIBRARY NAMES cunit CUnit)
 
