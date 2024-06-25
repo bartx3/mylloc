@@ -54,13 +54,36 @@ void* mylloc_impl(size_t size, const char * file, unsigned int line);
  * myfree(ptr);
  */
 void myfree(void * ptr);
-pthread_mutex_t mylloc_mutex;
-size_t mylloc_total_allocated;
-unsigned long int mylloc_total_allocations;
-size_t mylloc_current_memory_usage;
-size_t mylloc_peak_memory_usage;
-unsigned long int sbrk_calls;
-extern bool mylloc_initialized;
+
+/**
+ * Gets the total amount of memory allocated by mylloc through the entire runtime.
+ * @return
+ */
+size_t get_mylloc_total_allocated(void);
+
+/**
+ * Gets the total count of allocations made by mylloc through the entire runtime.
+ * @return
+ */
+unsigned long int get_mylloc_total_allocations(void);
+
+/**
+ * Gets the size of currently reserved memory by mylloc.
+ * @return
+ */
+size_t get_mylloc_current_memory_usage(void);
+
+/**
+ * Gets the peak memory usage of mylloc.
+ * @return
+ */
+size_t get_mylloc_peak_memory_usage(void);
+
+/**
+ * Gets the total number of sbrk calls made by mylloc.
+ * @return
+ */
+unsigned long int get_mylloc_sbrk_calls(void);
 
 /**
  * Prints out the statistics of mylloc.

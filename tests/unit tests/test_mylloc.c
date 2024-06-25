@@ -15,11 +15,11 @@ void test_mylloc() {
 
 void test_mylloc2() {
     void * ptr = mylloc(12);
-    CU_ASSERT(mylloc_current_memory_usage == 12);
+    CU_ASSERT(get_mylloc_current_memory_usage() == 12);
     void * ptr2 = mylloc(15);
-    CU_ASSERT(mylloc_current_memory_usage == 27);
+    CU_ASSERT(get_mylloc_current_memory_usage() == 27);
     void * ptr3 = mylloc(20);
-    CU_ASSERT(mylloc_current_memory_usage == 47);
+    CU_ASSERT(get_mylloc_current_memory_usage() == 47);
     int * x = ptr;
     x[0] = 0x10;
     x[1] = 0x20;

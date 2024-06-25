@@ -5,6 +5,12 @@
 #include <stdlib.h>
 
 bool mylloc_initialized = false;
+pthread_mutex_t mylloc_mutex;
+size_t mylloc_total_allocated;
+unsigned long int mylloc_total_allocations;
+size_t mylloc_current_memory_usage;
+size_t mylloc_peak_memory_usage;
+unsigned long int mylloc_sbrk_calls;
 
 void mylloc_init(void)
 {
@@ -15,9 +21,69 @@ void mylloc_init(void)
     mylloc_total_allocations = 0;
     mylloc_peak_memory_usage = 0;
     mylloc_current_memory_usage = 0;
-    sbrk_calls = 0;
+    mylloc_sbrk_calls = 0;
     mylloc_initialized = true;
     atexit(print_final_stats);
+}
+
+size_t get_mylloc_total_allocated(void)
+{
+    if (!mylloc_initialized) {
+        printf("mylloc not initialized\n");
+        return 0;
+    }
+    pthread_mutex_lock(&mylloc_mutex);
+    size_t total_allocated = mylloc_total_allocated;
+    pthread_mutex_unlock(&mylloc_mutex);
+    return total_allocated;
+}
+
+unsigned long int get_mylloc_total_allocations(void)
+{
+    if (!mylloc_initialized) {
+        printf("mylloc not initialized\n");
+        return 0;
+    }
+    pthread_mutex_lock(&mylloc_mutex);
+    unsigned long int total_allocations = mylloc_total_allocations;
+    pthread_mutex_unlock(&mylloc_mutex);
+    return total_allocations;
+}
+
+size_t get_mylloc_current_memory_usage(void)
+{
+    if (!mylloc_initialized) {
+        printf("mylloc not initialized\n");
+        return 0;
+    }
+    pthread_mutex_lock(&mylloc_mutex);
+    size_t current_memory_usage = mylloc_current_memory_usage;
+    pthread_mutex_unlock(&mylloc_mutex);
+    return current_memory_usage;
+}
+
+size_t get_mylloc_peak_memory_usage(void)
+{
+    if (!mylloc_initialized) {
+        printf("mylloc not initialized\n");
+        return 0;
+    }
+    pthread_mutex_lock(&mylloc_mutex);
+    size_t peak_memory_usage = mylloc_peak_memory_usage;
+    pthread_mutex_unlock(&mylloc_mutex);
+    return peak_memory_usage;
+}
+
+unsigned long int get_mylloc_sbrk_calls(void)
+{
+    if (!mylloc_initialized) {
+        printf("mylloc not initialized\n");
+        return 0;
+    }
+    pthread_mutex_lock(&mylloc_mutex);
+    unsigned long int sbrk_calls = mylloc_sbrk_calls;
+    pthread_mutex_unlock(&mylloc_mutex);
+    return sbrk_calls;
 }
 
 void print_stats(void)
@@ -26,12 +92,14 @@ void print_stats(void)
         printf("mylloc not initialized\n");
         return;
     }
+    pthread_mutex_lock(&mylloc_mutex);
     printf("mylloc_total_allocated: %zu\n", mylloc_total_allocated);
     printf("mylloc_total_allocations: %lu\n", mylloc_total_allocations);
     printf("mylloc_peak_memory_usage: %zu\n", mylloc_peak_memory_usage);
     printf("mylloc_current_memory_usage: %zu\n", mylloc_current_memory_usage);
-    printf("sbrk_calls: %lu\n", sbrk_calls);
+    printf("mylloc_sbrk_calls: %lu\n", mylloc_sbrk_calls);
     printf("mylloc_avg_alloc_size: %zu\n", mylloc_total_allocated / mylloc_total_allocations);
+    pthread_mutex_unlock(&mylloc_mutex);
 }
 
 void print_final_stats(void)
@@ -57,7 +125,7 @@ void * mylloc_impl(size_t size, const char * file, unsigned int line) {
     memblock *block = find_free_block(size); // Find a free block of memory.
     if (block == NULL) { // If the block is NULL.
         block = new_block(size); // Create a new block of memory.
-        sbrk_calls += 2; // Increment the sbrk calls. (one for getting required padding and one for getting the block)
+        mylloc_sbrk_calls += 2; // Increment the sbrk calls. (one for getting required padding and one for getting the block)
         if (block == NULL) { // If the block is NULL.
             pthread_mutex_unlock(&mylloc_mutex);
             return NULL; // Return NULL.
@@ -108,7 +176,7 @@ void give_back_hanging_blocks() {
     while (block != NULL && block->free) { // While the previous block is not NULL.
         memblock *prev = block->prev; // Set the previous block to the previous block of the block.
         give_block_back_to_os(block); // Give the block back to the OS.
-        sbrk_calls++; // Increment the sbrk calls. (for sbrk below 0)
+        mylloc_sbrk_calls++; // Increment the sbrk calls. (for sbrk below 0)
         block = prev; // Set the block to the previous block.
     }
     last_block = block; // Set the last block to the block.

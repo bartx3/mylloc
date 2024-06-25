@@ -4,7 +4,6 @@
 CC = gcc
 
 make all: libmylloc.a
-	./build_lib.sh .
 
 unit_tests: build/mylloc_tests
 	./build/mylloc_tests
