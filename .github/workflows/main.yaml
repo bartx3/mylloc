@@ -21,6 +21,8 @@ jobs:
         run: |
           make
           ls
+          echo "build:"
+          ls build
 
       - name: Run unit tests
         run: make unit_tests
