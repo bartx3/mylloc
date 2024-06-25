@@ -15,8 +15,8 @@ unsigned long int mylloc_sbrk_calls;
 void mylloc_init(void)
 {
     pthread_mutex_init(&mylloc_mutex, NULL);
-    first_block = NULL;
-    last_block = NULL;
+    set_first_block(NULL);
+    set_last_block(NULL);
     mylloc_total_allocated = 0;
     mylloc_total_allocations = 0;
     mylloc_peak_memory_usage = 0;
@@ -165,32 +165,32 @@ void myfree(void * ptr) {
     }
     mylloc_current_memory_usage -= block->size; // Decrement the total allocated by the size of the block.
     free_block(block); // Free the block.
-    if (last_block != NULL && last_block->free) { // If the last block is not NULL and is free.
+    if (get_last_block() != NULL && get_last_block()->free) { // If the last block is not NULL and is free.
         give_back_hanging_blocks(); // Give back hanging blocks.
     }
     pthread_mutex_unlock(&mylloc_mutex);
 }
 
 void give_back_hanging_blocks() {
-    memblock *block = last_block; // Set the block to the first block.
+    memblock *block = get_last_block(); // Set the block to the first block.
     while (block != NULL && block->free) { // While the previous block is not NULL.
         memblock *prev = block->prev; // Set the previous block to the previous block of the block.
         give_block_back_to_os(block); // Give the block back to the OS.
         mylloc_sbrk_calls++; // Increment the sbrk calls. (for sbrk below 0)
         block = prev; // Set the block to the previous block.
     }
-    last_block = block; // Set the last block to the block.
+    set_last_block(NULL); // Set the last block to the block.
     if (block != NULL) {
         block->next = NULL; // Set the next block of the block to NULL.
         validate_block(block); // Validate the block.
     }
     else
-        first_block = NULL; // Set the first block to NULL as we have freed every block
+        set_first_block(NULL); // Set the first block to NULL as we have freed every block
 }
 
 void print_blocks() {
     printf("----------------------------------BEGIN-BLOCK-DUMP--------------------------------------\n");
-    memblock * block = first_block; // Set the block to the first block.
+    memblock * block = get_first_block(); // Set the block to the first block.
     while (block != NULL) { // While the block is not NULL.
         printblock(block);
         block = block->next; // Set the block to the next block.

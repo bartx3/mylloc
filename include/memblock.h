@@ -19,8 +19,22 @@ typedef struct memblock {   // Our data structure for memory blocks. Takes up 40
     struct memblock *next;
 } memblock;
 
-memblock * first_block;  // Pointer to the first block of memory.
-memblock * last_block;   // Pointer to the last block of memory.
+memblock * get_first_block(void);
+memblock * get_last_block(void);
+/**
+ * @brief setter for first block
+ * @warning this function should be used only in myloc.c as it is not thread safe
+ * @param block
+ * @return
+ */
+void set_first_block(memblock * block);
+/**
+ * @brief setter for last block
+ * @warning this function should be used only in myloc.c as it is not thread safe
+ * @param block
+ * @return
+ */
+void set_last_block(memblock * block);
 
 memblock  * new_block(size_t size); // Function to create a new block of memory.
 
